@@ -6,11 +6,18 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql
 # Habilita o mod_rewrite do Apache
 RUN a2enmod rewrite
 
-# Copia os arquivos do projeto para o container
-COPY . /var/www/html/
+# Define o diretório de trabalho
+WORKDIR /var/www/html/
+
+# Copia todos os arquivos do projeto
+COPY . .
+
+# Verifica se os arquivos foram copiados (para debug)
+RUN ls -la
 
 # Configura as permissões
 RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 755 /var/www/html
 
 # Expõe a porta 80
 EXPOSE 80
