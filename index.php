@@ -52,7 +52,24 @@ if ( $_GET['tipo'] == 'aceita' ) {
     echo "</frameset>";
 
 } else {
-    mc_simples();  // Aqui estava mr_simples(), corrigido para mc_simples()
+    // Página inicial padrão
+    echo "<html>";
+    echo "<head>";
+    echo "<title>Sistema de Controle de Patrimônio - $VAR_Versao</title>";
+    echo "<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>";
+    echo "</head>";
+    echo "<body>";
+    
+    echo "<frameset rows='26%,74%' border=0 name='geral'>";
+    echo "<frame src='../cabecalho.php?titulo=Bens Patrimoniais - $VAR_Versao' name='cabecalho'>";
+    echo "<frameset cols='20%,80%'>";
+    echo "<frame src='./bem-menu.php' name='menu'>";
+    echo "<frame src='./bem-pesquisa.php' name='dados'>";
+    echo "</frameset>";
+    echo "</frameset>";
+
+    echo "</body>";
+    echo "</html>";
 }
 
 ?>
