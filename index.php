@@ -16,8 +16,6 @@
 		echo "<script>window.location.href = 'login.php';</script>";
 		exit;
 	}
-
-	// Página inicial do sistema
 ?>
 <!DOCTYPE html>
 <html>
@@ -41,25 +39,60 @@
 			gap: 20px;
 		}
 		.menu {
-			width: 200px;
+			width: 250px;
 			background: #f9f9f9;
 			padding: 15px;
 			border: 1px solid #ddd;
+			overflow: auto; /* Para caso o menu seja muito longo */
 		}
 		.content {
 			flex: 1;
 			padding: 15px;
 			border: 1px solid #ddd;
 		}
+		/* Estilização dos links do menu que virão do bem-menu.php */
 		.menu a {
 			display: block;
-			padding: 8px 0;
+			padding: 6px 0;
 			color: #333;
 			text-decoration: none;
+			font-size: 14px;
 		}
 		.menu a:hover {
 			color: #000;
 			background: #eee;
+			padding-left: 5px;
+		}
+		.menu hr {
+			border: none;
+			border-top: 1px solid #ddd;
+			margin: 10px 0;
+		}
+		.menu b {
+			display: block;
+			margin-top: 15px;
+			margin-bottom: 5px;
+			color: #666;
+		}
+		/* Estilo para o formulário de pesquisa */
+		.menu form {
+			margin-top: 10px;
+		}
+		.menu input[type="text"] {
+			padding: 4px;
+			margin: 2px 0;
+			border: 1px solid #ddd;
+		}
+		.menu input[type="submit"] {
+			background: #4CAF50;
+			color: white;
+			border: none;
+			padding: 5px 10px;
+			cursor: pointer;
+			margin-top: 5px;
+		}
+		.menu input[type="submit"]:hover {
+			background: #45a049;
 		}
 	</style>
 </head>
@@ -72,19 +105,7 @@
 
 	<div class="container">
 		<div class="menu">
-			<h3>Menu</h3>
-			<a href='bem-meusbens.php'>Meus bens</a>
-			<a href='bem-transf.php?tipo=pede'>Solicitar transferência</a>
-			<a href='bem-pesquisa.php?tipo=transf'>Aceitar transferência</a>
-			<a href='bem-local.php'>Alterar local</a>
-			<a href='bem-aliena-sol.php'>Solicitar alienação</a>
-			<a href='bem-cancela.php?tipo=inicio'>Cancelamento</a>
-			<?php if ($_SESSION['perfil'] >= 6): ?>
-			<h3>Agente Patrimonial</h3>
-			<a href='bem-local-agente.php'>Alterar local (Agente)</a>
-			<a href='bem-transf-agente.php'>Transferência (Agente)</a>
-			<a href='bem-trocasituacao.php'>Trocar situação</a>
-			<?php endif; ?>
+			<?php include("bem-menu.php"); ?>
 		</div>
 
 		<div class="content">
