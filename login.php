@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $usuario_teste = [
                 'mat' => '999999',
                 'nome' => 'Super Usuário',
-                'perfil' => 26 // Perfil especial com todos os acessos
+                'perfil' => $PERFIL_Inventario // Alterado para 26 (perfil de Inventário)
             ];
         }
 
