@@ -23,13 +23,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $matricula = $_POST['matricula'];
     $senha = $_POST['senha'];
 
-    // Verifica se é o usuário de teste
-    if ($matricula == '340044') {
-        if ($senha == 'admin') {
+    // Verifica se é um dos usuários de teste
+    if ($matricula == '340044' || $matricula == '999999') {
+        $usuario_teste = false;
+        
+        // Usuário de teste original (Chefia)
+        if ($matricula == '340044' && $senha == 'admin') {
+            $usuario_teste = [
+                'mat' => '340044',
+                'nome' => 'Usuário de Teste - Chefia',
+                'perfil' => $PERFIL_Chefia // 7
+            ];
+        }
+        
+        // Novo usuário de teste (Super Usuário)
+        if ($matricula == '999999' && $senha == 'super123') {
+            $usuario_teste = [
+                'mat' => '999999',
+                'nome' => 'Super Usuário',
+                'perfil' => 99 // Perfil especial com todos os acessos
+            ];
+        }
+
+        if ($usuario_teste) {
             // Login bem sucedido para usuário de teste
-            $_SESSION['mat'] = '340044';
-            $_SESSION['nome'] = 'Usuário de Teste';
-            $_SESSION['perfil'] = $PERFIL_Chefia; // Perfil de chefia (7)
+            $_SESSION['mat'] = $usuario_teste['mat'];
+            $_SESSION['nome'] = $usuario_teste['nome'];
+            $_SESSION['perfil'] = $usuario_teste['perfil'];
+            $_SESSION['super_user'] = ($usuario_teste['mat'] == '999999'); // Flag para super usuário
             header("Location: index.php");
             exit;
         } else {
