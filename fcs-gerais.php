@@ -3,6 +3,13 @@
 // Funções gerais do sistema
 //
 
+// IMPORTANTE: Não pode haver nenhum espaço ou linha em branco antes do <?php ou depois do ?>
+
+// Inicia a sessão se ainda não foi iniciada
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Função para conectar ao banco de dados
 if (!function_exists('abre_banco')) {
     function abre_banco($banco, $usuario, $servidor, $senha) {
