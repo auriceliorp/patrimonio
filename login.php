@@ -6,11 +6,9 @@
 // Embrapa Agroindustria de Alimentos
 //
 
+// IMPORTANTE: Não pode haver nenhum espaço ou linha em branco antes do <?php
 require("fcs-gerais.php");
 require("./include/patrimonio.conf");
-
-// Inicia sessão
-session_start();
 
 // Se já estiver logado, redireciona
 if (isset($_SESSION['mat'])) {
@@ -32,25 +30,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $usuario_teste = [
                 'mat' => '340044',
                 'nome' => 'Usuário de Teste - Chefia',
-                'perfil' => $PERFIL_Chefia // 7
+                'perfil' => $PERFIL_Chefia
             ];
         }
         
-        // Novo usuário de teste (Super Usuário)
+        // Super usuário
         if ($matricula == '999999' && $senha == 'super123') {
             $usuario_teste = [
                 'mat' => '999999',
                 'nome' => 'Super Usuário',
-                'perfil' => $PERFIL_Inventario // Alterado para 26 (perfil de Inventário)
+                'perfil' => $PERFIL_Inventario
             ];
         }
 
         if ($usuario_teste) {
-            // Login bem sucedido para usuário de teste
             $_SESSION['mat'] = $usuario_teste['mat'];
             $_SESSION['nome'] = $usuario_teste['nome'];
             $_SESSION['perfil'] = $usuario_teste['perfil'];
-            $_SESSION['super_user'] = ($usuario_teste['mat'] == '999999'); // Flag para super usuário
+            $_SESSION['super_user'] = ($usuario_teste['mat'] == '999999');
             header("Location: index.php");
             exit;
         } else {
@@ -106,13 +103,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// Página de login
-?>
-<!DOCTYPE html>
+// HTML da página de login
+?><!DOCTYPE html>
 <html>
 <head>
     <title>Login - Sistema de Controle de Patrimônio - <?php echo $VAR_Versao; ?></title>
-    <meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
     <style>
         body { font-family: Arial, sans-serif; }
         .login-box { 
