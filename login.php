@@ -23,44 +23,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $matricula = $_POST['matricula'];
     $senha = $_POST['senha'];
 
-    // Conecta ao banco
-    $conn = abre_banco($VAR_Banco, $VAR_Usuario, $VAR_Servidor, $VAR_Senha);
-
-    // Verifica usuário na view_funcionario
-    $query = "SELECT $FD_FUNC_MAT, $FD_FUNC_NOME, $FD_FUNC_USERNAME 
-              FROM $TB_FUNCIONARIO 
-              WHERE $FD_FUNC_MAT = '$matricula' 
-              AND $V_FUNC_ATIVO";
-
-    $result = mysqli_query($conn, $query);
-
-    if ($result && mysqli_num_rows($result) > 0) {
-        $usuario = mysqli_fetch_assoc($result);
-
-        // Verifica perfil de acesso
-        $query_acesso = "SELECT TipoUsuario 
-                        FROM $TB_ACESSO 
-                        WHERE MatFunc = '$matricula'";
-        
-        $result_acesso = mysqli_query($conn, $query_acesso);
-        $perfil = 1; // Perfil padrão
-
-        if ($result_acesso && mysqli_num_rows($result_acesso) > 0) {
-            $acesso = mysqli_fetch_assoc($result_acesso);
-            $perfil = $acesso['TipoUsuario'];
-        }
-
-        // Cria sessão
-        $_SESSION['mat'] = $usuario[$FD_FUNC_MAT];
-        $_SESSION['nome'] = $usuario[$FD_FUNC_NOME];
-        $_SESSION['perfil'] = $perfil;
-
-        // Redireciona para index
-        header("Location: index.php");
-        exit;
-
+    // Verifica se é o usuário de teste
+    if ($matricula == '340044' && $senha != 'admin') {
+        $erro = "Senha incorreta";
     } else {
-        $erro = "Matrícula ou senha inválida";
+        // Conecta ao banco
+        $conn = abre_banco($VAR_Banco, $VAR_Usuario, $VAR_Servidor, $VAR_Senha);
+
+        // Verifica usuário na view_funcionario
+        $query = "SELECT $FD_FUNC_MAT, $FD_FUNC_NOME, $FD_FUNC_USERNAME 
+                FROM $TB_FUNCIONARIO 
+                WHERE $FD_FUNC_MAT = '$matricula' 
+                AND $V_FUNC_ATIVO";
+
+        $result = mysqli_query($conn, $query);
+
+        if ($result && mysqli_num_rows($result) > 0) {
+            $usuario = mysqli_fetch_assoc($result);
+
+            // Verifica perfil de acesso
+            $query_acesso = "SELECT TipoUsuario 
+                            FROM $TB_ACESSO 
+                            WHERE MatFunc = '$matricula'";
+            
+            $result_acesso = mysqli_query($conn, $query_acesso);
+            $perfil = 1; // Perfil padrão
+
+            if ($result_acesso && mysqli_num_rows($result_acesso) > 0) {
+                $acesso = mysqli_fetch_assoc($result_acesso);
+                $perfil = $acesso['TipoUsuario'];
+            }
+
+            // Cria sessão
+            $_SESSION['mat'] = $usuario[$FD_FUNC_MAT];
+            $_SESSION['nome'] = $usuario[$FD_FUNC_NOME];
+            $_SESSION['perfil'] = $perfil;
+
+            // Redireciona para index
+            header("Location: index.php");
+            exit;
+
+        } else {
+            $erro = "Matrícula inválida";
+        }
     }
 }
 
