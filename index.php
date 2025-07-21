@@ -13,7 +13,7 @@
 
 	// Se não estiver logado, redireciona para login
 	if (!isset($_SESSION['mat'])) {
-		header("Location: login.php");
+		echo "<script>window.location.href = 'login.php';</script>";
 		exit;
 	}
 
