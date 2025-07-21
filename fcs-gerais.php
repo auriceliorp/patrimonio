@@ -3,16 +3,19 @@
 // Funções gerais do sistema
 //
 
-// Função para conectar ao banco de dados
-function abre_banco($banco, $usuario, $servidor, $senha) {
-    $conn = mysqli_init();
-    mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL);
-    mysqli_real_connect($conn, $servidor, $usuario, $senha, $banco, 33843, NULL, MYSQLI_CLIENT_SSL);
-    
-    if (!$conn) {
-        die("Conexão falhou: " . mysqli_connect_error());
+// Verifica se a função já existe antes de declarar
+if (!function_exists('abre_banco')) {
+    // Função para conectar ao banco de dados
+    function abre_banco($banco, $usuario, $servidor, $senha) {
+        $conn = mysqli_init();
+        mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL);
+        mysqli_real_connect($conn, $servidor, $usuario, $senha, $banco, 33843, NULL, MYSQLI_CLIENT_SSL);
+        
+        if (!$conn) {
+            die("Conexão falhou: " . mysqli_connect_error());
+        }
+        return $conn;
     }
-    return $conn;
 }
 
 // Função para tratar erros
