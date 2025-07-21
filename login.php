@@ -24,13 +24,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $senha = $_POST['senha'];
 
     // Verifica se é o usuário de teste
-    if ($matricula == '340044' && $senha != 'admin') {
-        $erro = "Senha incorreta";
+    if ($matricula == '340044') {
+        if ($senha == 'admin') {
+            // Login bem sucedido para usuário de teste
+            $_SESSION['mat'] = '340044';
+            $_SESSION['nome'] = 'Usuário de Teste';
+            $_SESSION['perfil'] = $PERFIL_Chefia; // Perfil de chefia (7)
+            header("Location: index.php");
+            exit;
+        } else {
+            $erro = "Senha incorreta";
+        }
     } else {
         // Conecta ao banco
         $conn = abre_banco($VAR_Banco, $VAR_Usuario, $VAR_Servidor, $VAR_Senha);
 
-        // Verifica usuário na view_funcionario
+        // Define os campos da tabela de funcionários (caso não estejam no arquivo de configuração)
+        if (!isset($TB_FUNCIONARIO)) $TB_FUNCIONARIO = "bemtbfuncionario";
+        if (!isset($FD_FUNC_MAT)) $FD_FUNC_MAT = "matricula";
+        if (!isset($FD_FUNC_NOME)) $FD_FUNC_NOME = "nome";
+        if (!isset($FD_FUNC_USERNAME)) $FD_FUNC_USERNAME = "username";
+        if (!isset($V_FUNC_ATIVO)) $V_FUNC_ATIVO = "1=1";
+
+        // Verifica usuário na tabela de funcionários
         $query = "SELECT $FD_FUNC_MAT, $FD_FUNC_NOME, $FD_FUNC_USERNAME 
                 FROM $TB_FUNCIONARIO 
                 WHERE $FD_FUNC_MAT = '$matricula' 
@@ -70,9 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 // Página de login
-mc_simples();
 ?>
-
+<!DOCTYPE html>
 <html>
 <head>
     <title>Login - Sistema de Controle de Patrimônio - <?php echo $VAR_Versao; ?></title>
