@@ -3,7 +3,7 @@
 //
 //	Sistema: Bens patrimoniais
 //	Modulo: Gerador do menu do sistema
-//	Concluído em 25/08/2003
+//	Concluï¿½do em 25/08/2003
 //	Alterado em: 18/09/2008
 //	ALTERADO: 15/12/2008
 //	Autor: Adil D. Pinto Jr.
@@ -39,19 +39,22 @@ if ( !$linhas || $linhas == 0 ) {
 	$acesso = $Dados[TipoUsuario];
 }
 
+// Adicionar verificaÃ§Ã£o de super usuÃ¡rio
+$is_super_user = isset($_SESSION['super_user']) && $_SESSION['super_user'];
+
 //=====================================================
 //
 //	OPCOES DO USUARIO
 //
 //	Montagem do menu
 //
-echo "<P><B>Usuário</B><BR>";
+echo "<P><B>Usuï¿½rio</B><BR>";
 echo "<HR>";
 echo "<a href='./bem-meusbens.php' target ='dados'>Meus bens</a><BR>";
 echo "<a href='./bem-transf.php?tipo=pede' target ='dados'>Solicita transf.</a><BR>";
 echo "<a href='./bem-pesquisa.php?tipo=transf' target ='dados'>Aceita transf.</a><BR>";
 echo "<a href='./bem-local.php' target ='dados'>Altera local</a><BR>";
-echo "<a href='./bem-aliena-sol.php' target ='dados'>Solicita alienação</a><BR>";
+echo "<a href='./bem-aliena-sol.php' target ='dados'>Solicita alienaï¿½ï¿½o</a><BR>";
 echo "<a href='./bem-cancela.php?tipo=inicio' target ='dados'>Cancelamento</a><BR>";
 
 
@@ -62,15 +65,16 @@ echo "<a href='./bem-cancela.php?tipo=inicio' target ='dados'>Cancelamento</a><B
 //	2 - Administrador
 //	6- Patrimonio
 //
-if ( $acesso == $PERFIL_Agente ) {
-	echo "<P><B>Patrimônio</B><BR>";
-	echo "<HR>";
-	echo "<a href='./bem-pesquisa.php?tipo=transf-pendente' target ='dados'>Transf. pendentes</a><BR>";
-	echo "<a href='./bem-transf-agente.php?user=$acesso' target ='dados'>Realiza transf.</a><BR>";
-	echo "<a href='./bem-pesquisa.php?tipo=aliena-conf' target ='dados'>Aceita alienação</a><BR>";
-	echo "<a href='./bem-pesquisa.php?tipo=aliena-fim' target ='dados'>Finaliza alienação</a><BR>";
-	echo "<a href='./bem-local-agente.php' target ='dados'>Troca de Local</a><BR>";
-	echo "<a href='./bem-trocasituacao.php' target ='dados'>Troca de situação</a> - NOVO<BR>";
+if ($is_super_user || $acesso == $PERFIL_Agente || $acesso == $PERFIL_Inventario) {
+    echo "<P><B>PatrimÃ´nio</B><BR>";
+    echo "<HR>";
+    echo "<a href='./bem-pesquisa.php?tipo=transf-pendente' target ='dados'>Transf. pendentes</a><BR>";
+    echo "<a href='./bem-transf-agente.php?user=$acesso' target ='dados'>Realiza transf.</a><BR>";
+    echo "<a href='./bem-pesquisa.php?tipo=aliena-conf' target ='dados'>Aceita alienaÃ§Ã£o</a><BR>";
+    echo "<a href='./bem-pesquisa.php?tipo=aliena-fim' target ='dados'>Finaliza alienaÃ§Ã£o</a><BR>";
+    echo "<a href='./bem-local-agente.php' target ='dados'>Troca de Local</a><BR>";
+    echo "<a href='./bem-trocasituacao.php' target ='dados'>Troca de situaÃ§Ã£o</a> - NOVO<BR>";
+    echo "<a href='./bem-local.php' target ='dados'>Cadastro de locais</a> - NOVO<BR>";
 }
 echo "</P>";
 
@@ -82,11 +86,11 @@ echo "</P>";
 //	6 - Patrimonio
 //	26 - Membros da Comissao de Inventario
 //
-if ( $acesso == $PERFIL_Agente || $acesso == $PERFIL_Inventario ) {
-	echo "<P><B>Comissão</B><BR>";
-	echo "<HR>";
-	echo "<a href='./bem-local-comissao.php' target ='dados'>Alteração de local</a><BR>";
-	echo "<a href='./bem-pesquisa.php?tipo=transf-pendente' target ='dados'>Transf. pendentes</a><BR>";
+if ($is_super_user || $acesso == $PERFIL_Agente || $acesso == $PERFIL_Inventario) {
+    echo "<P><B>ComissÃ£o</B><BR>";
+    echo "<HR>";
+    echo "<a href='./bem-local-comissao.php' target ='dados'>AlteraÃ§Ã£o de local</a><BR>";
+    echo "<a href='./bem-pesquisa.php?tipo=transf-pendente' target ='dados'>Transf. pendentes</a><BR>";
 }
 echo "</P>";
 
@@ -99,19 +103,19 @@ echo "</P>";
 //	6- Patrimonio
 //	7- Chefia
 //
-if ( $acesso == $PERFIL_Agente || $acesso == $PERFIL_Chefia ) {
-	echo "<P><B>Relatório</B><BR>";
-		echo "<HR>";
-	echo "<a href='./bem-rel1.php' target ='dados'>Transf. concluídas</a><BR>";
-	echo "<a href='./bem-rel2.php' target ='dados'>Termo individual</a><BR>";
-	echo "<a href='./bem-rel3.php' target ='dados'>Bens por situação</a><BR>";
-	echo "<a href='./bem-rel6.php' target ='dados'>Bens por tipo</a><BR>";
-	echo "<a href='./bem-rel4.php' target ='dados'>Listagem geral</a><BR>";
-	echo "<a href='./bem-rel5.php' target ='dados'>Bens por área</a><BR>";
-	echo "<a href='./bem-rel7pdf.php' target ='novo'>Completo por local</a><BR>";
-	echo "<a href='./bem-rel8-ativo.php' target ='dados'>Empreg. sem bens</a><BR>";
-	echo "<a href='./bem-rel8-inativo.php' target ='dados'>Inativos com bens</a><BR>";
-	echo "<a href='./bem-rel9.php' target ='dados'>Bens por local</a><BR>";
+if ($is_super_user || $acesso == $PERFIL_Agente || $acesso == $PERFIL_Chefia || $acesso == $PERFIL_Inventario) {
+    echo "<P><B>RelatÃ³rio</B><BR>";
+    echo "<HR>";
+    echo "<a href='./bem-rel1.php' target ='dados'>Transf. concluÃ­das</a><BR>";
+    echo "<a href='./bem-rel2.php' target ='dados'>Termo individual</a><BR>";
+    echo "<a href='./bem-rel3.php' target ='dados'>Bens por situaÃ§Ã£o</a><BR>";
+    echo "<a href='./bem-rel6.php' target ='dados'>Bens por tipo</a><BR>";
+    echo "<a href='./bem-rel4.php' target ='dados'>Listagem geral</a><BR>";
+    echo "<a href='./bem-rel5.php' target ='dados'>Bens por Ã¡rea</a><BR>";
+    echo "<a href='./bem-rel7pdf.php' target ='novo'>Completo por local</a><BR>";
+    echo "<a href='./bem-rel8-ativo.php' target ='dados'>Empreg. sem bens</a><BR>";
+    echo "<a href='./bem-rel8-inativo.php' target ='dados'>Inativos com bens</a><BR>";
+    echo "<a href='./bem-rel9.php' target ='dados'>Bens por local</a><BR>";
 	if ( $_SESSION[mat] == '262177' ) {
 		echo "<a href='./TESTE-bem-rel2pdf.php?nome=$_SESSION[nome]&mat=$_SESSION[mat]' target ='novo'>TESTE-Termo de respons.</a><BR>";
 	}
@@ -126,16 +130,15 @@ if ( $acesso == $PERFIL_Agente || $acesso == $PERFIL_Chefia ) {
 //	2 - Administrador
 //	6- Patrimonio
 //
-if ( $acesso == $PERFIL_Agente ) {
-	echo "<P><B>Cadastro</B><BR>";
-	echo "<HR>";
-	echo "Digite o número do bem a pesquisar:";
-	echo "<FORM ACTION='./bem-cad.php' TARGET='dados' METHOD='post'>";
-	echo "<INPUT TYPE='text' NAME='numpat' SIZE='7' MAXLENGTH=7>";
-	echo "<INPUT TYPE='text' NAME='inc' SIZE='3'  MAXLENGTH=3 VALUE='000'>";
-	echo "<INPUT TYPE='submit' NAME='submit' VALUE='Pesquisa'>";
-	echo "</FORM>";
-	echo "<P>";
+if ($is_super_user || $acesso == $PERFIL_Agente || $acesso == $PERFIL_Inventario) {
+    echo "<P><B>Cadastro</B><BR>";
+    echo "<HR>";
+    echo "Digite o nÃºmero do bem a pesquisar:";
+    echo "<FORM ACTION='./bem-cad.php' TARGET='dados' METHOD='post'>";
+    echo "<INPUT TYPE='text' NAME='numpat' SIZE='7' MAXLENGTH=7>";
+    echo "<INPUT TYPE='text' NAME='inc' SIZE='3'  MAXLENGTH=3 VALUE='000'>";
+    echo "<INPUT TYPE='submit' NAME='submit' VALUE='Pesquisa'>";
+    echo "</FORM>";
 }
 	
 //echo "</BODY>";
