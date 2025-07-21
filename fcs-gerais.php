@@ -61,5 +61,4 @@ function mc_completo($titulo) {
 function mr_rodape() {
     echo "</body>";
     echo "</html>";
-}
-?> 
+} 
