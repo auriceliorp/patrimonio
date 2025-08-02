@@ -6,9 +6,12 @@
 // Embrapa Agroindustria de Alimentos
 //
 
+// Inicia a sessão
+session_start();
+
 // IMPORTANTE: Não pode haver nenhum espaço ou linha em branco antes do <?php
-require("fcs-gerais.php");
 require("./include/patrimonio.conf");
+require("fcs-gerais.php");
 
 // Se já estiver logado, redireciona
 if (isset($_SESSION['mat'])) {
@@ -18,8 +21,8 @@ if (isset($_SESSION['mat'])) {
 
 // Se o formulário foi enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $matricula = $_POST['matricula'];
-    $senha = $_POST['senha'];
+    $matricula = trim($_POST['matricula']);
+    $senha = trim($_POST['senha']);
 
     // Verifica se é um dos usuários de teste
     if ($matricula == '340044' || $matricula == '999999') {
@@ -44,10 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         if ($usuario_teste) {
+            session_regenerate_id(true); // Segurança adicional
             $_SESSION['mat'] = $usuario_teste['mat'];
             $_SESSION['nome'] = $usuario_teste['nome'];
             $_SESSION['perfil'] = $usuario_teste['perfil'];
             $_SESSION['super_user'] = ($usuario_teste['mat'] == '999999');
+            
             header("Location: index.php");
             exit;
         } else {
@@ -55,16 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     } else {
         // Conecta ao banco
-        $conn = abre_banco($VAR_Banco, $VAR_Usuario, $VAR_Servidor, $VAR_Senha);
-
-        // Define os campos da tabela de funcionários (caso não estejam no arquivo de configuração)
-        if (!isset($TB_FUNCIONARIO)) $TB_FUNCIONARIO = "bemtbfuncionario";
-        if (!isset($FD_FUNC_MAT)) $FD_FUNC_MAT = "matricula";
-        if (!isset($FD_FUNC_NOME)) $FD_FUNC_NOME = "nome";
-        if (!isset($FD_FUNC_USERNAME)) $FD_FUNC_USERNAME = "username";
-        if (!isset($V_FUNC_ATIVO)) $V_FUNC_ATIVO = "1=1";
+        $conn = abre_banco($VAR_Banco, $VAR_Usuario, $VAR_Servidor, $VAR_Senha, $VAR_Porta);
 
         // Verifica usuário na tabela de funcionários
+        $matricula = escape_string($conn, $matricula);
         $query = "SELECT $FD_FUNC_MAT, $FD_FUNC_NOME, $FD_FUNC_USERNAME 
                 FROM $TB_FUNCIONARIO 
                 WHERE $FD_FUNC_MAT = '$matricula' 
@@ -89,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             // Cria sessão
+            session_regenerate_id(true); // Segurança adicional
             $_SESSION['mat'] = $usuario[$FD_FUNC_MAT];
             $_SESSION['nome'] = $usuario[$FD_FUNC_NOME];
             $_SESSION['perfil'] = $perfil;
@@ -100,6 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $erro = "Matrícula inválida";
         }
+        mysqli_close($conn);
     }
 }
 
@@ -134,6 +135,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             cursor: pointer;
             width: 100%;
         }
+        input[type='submit']:hover {
+            background: #45a049;
+        }
         .error { 
             color: red;
             margin-bottom: 15px;
@@ -150,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </center>
 
         <?php if (isset($erro)): ?>
-            <div class="error"><?php echo $erro; ?></div>
+            <div class="error"><?php echo htmlspecialchars($erro); ?></div>
         <?php endif; ?>
 
         <form method='post' action='login.php'>
@@ -167,3 +171,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </body>
 </html>
+
